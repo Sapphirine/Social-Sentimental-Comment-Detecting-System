@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <form name="form" action="/index" method="POST">
+            <input class="span2" type="text" placeholder="Product" name="product">
+            <input class="span2" type="text" placeholder="Category" name="category">
+            <button type="submit">Submit</button>
+        </form>
+        
+        <style type="text/css">
+            h1.pos_abs
+            {
+                position:absolute;
+                left:200px;
+                top:770px
+            }
+        
+            h2.pos_abs
+            {
+                position:absolute;
+                left:200px;
+                top:810px
+            }
+        
+            </style>
+  
+  
+        <!--Load the AJAX API-->
+        <div id="textDiv"></div>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            
+            // Load the Visualization API and the corechart package.
+            google.charts.load('current', {'packages':['corechart']});
+            
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(drawChart);
+            
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+            
+            var negative = 0;
+            var positive = 0;
+            var neutral = 0;
+            
+        
+            function drawChart() {
+                // Create the data table.
+                var tweets = {{ tweets | safe}};
+                if(tweets.length > 0){
+                    //alert("results found");
+                    positive = tweets[0];
+                    negative = tweets[2];
+                    neutral = tweets[1];
+                }
+                
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+                data.addRows([
+                              ['Negative', negative],
+                              ['Positive', positive],
+                              ['Neutral', neutral],
+                              ]);
+                              // Set chart options
+                              var options = {'title':'Social Sentimental Detecting System',
+                                  'width':1024,
+                                  'height':768};
+                              // Instantiate and draw our chart, passing in some options.
+                              var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+                              chart.draw(data, options);
+            }
+        </script>
+        <script type="text/javascript">
+            //var div = document.getElementById("textDiv");
+            //div.textContent = "my text";
+            //var text = div.textContent;
+        </script>
+        <h1 class="pos_abs">Negative Comments:</h1>
+        <h2 class="pos_abs">{{negative_text}}</h4>
+
+    </head>
+    <body>
+        <!--Div that will hold the pie chart-->
+
+    <div id="chart_div"></div>
+        
+    </body>
+</html>
